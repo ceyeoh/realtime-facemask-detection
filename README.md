@@ -12,3 +12,5 @@ Usage:
 ```
 python image_detect.py -i <INPUT_IMAGE>
 ```
+
+Reference: https://github.com/chandrikadeb7/Face-Mask-Detection
