@@ -7,3 +7,8 @@ Objective
 
 Dataset: https://www.kaggle.com/andrewmvd/face-mask-detection
 
+
+Usage: 
+```
+python image_detect.py -i <INPUT_IMAGE>
+```
