@@ -1,16 +1,19 @@
 # realtime-facemask-detection
-Realtime Face Mask Detection
-
-Objective
+## Objectives
 - To detect and classify if people wearing face mask.
 - To evaluate the precision of detection and classification for the face mask detected.
 
-Dataset: https://www.kaggle.com/andrewmvd/face-mask-detection
+## Dataset
+Link: [Google Drive](https://drive.google.com/file/d/1xlv8tzBDfmKgOGtFgqY_FzinNiksbGom/view?usp=sharing)
 
-
-Usage: 
+## Usage
+### Image
 ```
-python image_detect.py -i <INPUT_IMAGE>
+python detect_image.py -i <IMAGE_PATH>
 ```
-
-Reference: https://github.com/chandrikadeb7/Face-Mask-Detection
+### Webcam
+```
+python detect_video.py
+```
+# Reference
+https://github.com/chandrikadeb7/Face-Mask-Detection
