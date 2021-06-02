@@ -17,7 +17,7 @@ def detect():
     weights = 'face_detector/res10_300x300_ssd_iter_140000.caffemodel'
     cvnet = cv2.dnn.readNet(prototxt, weights)
 
-    net = torch.load('models/21052021_155157_resnet18_softmax_99.7558_epoch_38.pth', map_location=torch.device('cpu'))
+    net = torch.load('models/resnet18.pth', map_location=torch.device('cpu'))
     net.eval()
 
     image = cv2.imread(args['image'])
@@ -55,7 +55,7 @@ def detect():
             _, predicted = torch.max(out.data, 1)
             label = 'Mask' if predicted.item()==0 else 'No Mask'
             color = (0, 255, 0) if label=='Mask' else (0, 0, 255)
-            label = f'{label} {(nn.Softmax(1)(out).squeeze()[predicted].item()*100):.4f}%'
+            label = f'{label} {(nn.Softmax(1)(out).squeeze()[predicted].item()*100):.2f}%'
             cv2.putText(image, label, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
             cv2.rectangle(image, (startX, startY), (endX, endY), color, 2)
     cv2.imshow("Output", image)

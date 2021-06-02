@@ -2,6 +2,7 @@ import numpy as np
 import cv2 
 import imutils
 from imutils.video import VideoStream
+from imutils.video import FPS
 from PIL import Image
 import time
 
@@ -53,13 +54,14 @@ prototxt = 'face_detector/deploy.prototxt'
 weights = 'face_detector/res10_300x300_ssd_iter_140000.caffemodel'
 facenet = cv2.dnn.readNet(prototxt, weights)
 
-masknet = torch.load('models/21052021_155157_resnet18_softmax_99.7558_epoch_38.pth', map_location=torch.device('cpu'))
+masknet = torch.load('models/resnet18.pth', map_location=torch.device('cpu'))
 masknet.eval()
 
 vs = VideoStream(src=0).start()
 time.sleep(2.0)
 
 while True:
+    fps = FPS().start()
     frame = vs.read()
     frame = imutils.resize(frame, width=800)
     (locs, preds) = detect(frame, facenet, masknet)
@@ -67,11 +69,14 @@ while True:
         (startX, startY, endX, endY) = box
         _, predicted = torch.max(pred.data, 1)
         label = 'Mask' if predicted.item()==0 else 'No Mask'
-        color = (0, 255, 0) if label=='Mask' else (0, 0, 255)
-        label = f'{label} {(nn.Softmax(1)(pred).squeeze()[predicted].item()*100):.4f}%'
+        color = (0, 200, 0) if label=='Mask' else (0, 0, 200)
+        label = f'{label} {(nn.Softmax(1)(pred).squeeze()[predicted].item()*100):.2f}%'
         cv2.putText(frame, label, (startX, startY - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.45, color, 2)
         cv2.rectangle(frame, (startX, startY), (endX, endY), color, 2)
-
+    fps.update()
+    fps.stop()
+    text = f'FPS: {fps.fps():.2f}'
+    cv2.putText(frame, text, (15, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.65, (200, 0, 0), 2)
     cv2.imshow('Frame', frame)
     key = cv2.waitKey(1) & 0xFF
 
